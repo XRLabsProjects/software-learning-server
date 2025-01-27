@@ -9,8 +9,8 @@ import {
 
 // TODO: CREATE A TABLE THAT GETS UPDATED ON DATA ENTRY
 
-const port = process.env.PORT;
 const app = express();
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
@@ -64,5 +64,5 @@ app.post("/api/addData", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server at http://localhost:${port}`);
+  console.log(`Server at http://209.38.30.213:${port}`);
 });
