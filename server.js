@@ -64,5 +64,5 @@ app.post("/api/addData", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server at http://209.38.30.213:${port}`);
+  console.log(`Server at https://xr-labs-server.com.au:${port}`);
 });
