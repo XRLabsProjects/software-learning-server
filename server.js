@@ -10,20 +10,9 @@ import {
 // TODO: CREATE A TABLE THAT GETS UPDATED ON DATA ENTRY
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.DB_PORT;
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "x-access-token, Origin, X-Requested-With, Content-Type, Accept",
-  );
-  next();
-});
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -31,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/getSoftwareData", async (req, res) => {
+  console.log("Server received call to path /api/getSoftwareData");
   const data = await getSoftwareData();
   const outputData = [];
   data.forEach((doc) => {
@@ -48,6 +38,7 @@ app.get("/api/getSoftwareData", async (req, res) => {
 });
 
 app.post("/api/getFilteredSoftwareData", async (req, res) => {
+  console.log("Server received call to path /api/getFilteredSoftwareData");
   const data = await getFilteredSoftwareData(req.body);
   const outputData = [];
   data.forEach((doc) => {
@@ -65,11 +56,13 @@ app.post("/api/getFilteredSoftwareData", async (req, res) => {
 });
 
 app.post("/api/checkAccessKey", async (req, res) => {
+  console.log("Server received call to path /api/checkAccessKey");
   const isKeyValid = await checkAccessKeyValidity(req.body.key.toUpperCase());
   res.send(isKeyValid);
 });
 
 app.post("/api/addData", async (req, res) => {
+  console.log("Server received call to path /api/addData");
   const response = await addData(req.body);
   res.send(true);
 });
