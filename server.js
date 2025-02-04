@@ -91,7 +91,7 @@ app.post("/api/sendEmail", async (req, res) => {
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       replyTo: email,
-      subject: "", // TODO:
+      subject: "Fish", // TODO:
       text: `From: ${name}\nEmail:${email}\n\n${message}`,
     };
 
