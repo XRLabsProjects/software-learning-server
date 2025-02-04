@@ -7,8 +7,8 @@ import {
   addData,
 } from "./mongoConnection.js";
 
-import isEmail from "validator/lib/isEmail.js";
-import nodemailer from "nodemailer";
+// import isEmail from "validator/lib/isEmail.js";
+// import nodemailer from "nodemailer";
 // TODO: CREATE A TABLE THAT GETS UPDATED ON DATA ENTRY
 
 const app = express();
@@ -70,44 +70,43 @@ app.post("/api/addData", async (req, res) => {
   res.send(true);
 });
 
-app.post("/api/sendEmail", async (req, res) => {
-  console.log("Server received call to path /api/sendEmail");
-  const { name, email, message } = req.body;
-  if (!name || !email || !message || !isEmail(email)) {
-    res.send(false);
-  } else {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: false, // use false for STARTTLS; true for SSL on port 465
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    // TODO: BE SURE TO USE PROCESS.ENV
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: process.env.EMAIL_TO,
-      replyTo: email,
-      subject: "Fish", // TODO:
-      text: `From: ${name}\nEmail:${email}\n\n${message}`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Failed to send email due to server error");
-        res.send(false);
-      } else {
-        console.log("Successfully sent email");
-        return res.send(true);
-      }
-    });
-
-    res.send(true);
-  }
-});
+// app.post("/api/sendEmail", async (req, res) => {
+//   console.log("Server received call to path /api/sendEmail");
+//   const { name, email, message } = req.body;
+//   if (!name || !email || !message || !isEmail(email)) {
+//     res.send(false);
+//   } else {
+//     const transporter = nodemailer.createTransport({
+//       host: process.env.SMTP_HOST,
+//       port: process.env.SMTP_PORT,
+//       secure: false, // use false for STARTTLS; true for SSL on port 465
+//       auth: {
+//         user: process.env.SMTP_USER,
+//         pass: process.env.SMTP_PASS,
+//       },
+//     });
+//
+//     const mailOptions = {
+//       from: process.env.EMAIL_FROM,
+//       to: process.env.EMAIL_TO,
+//       replyTo: email,
+//       subject: "Fish", // TODO:
+//       text: `From: ${name}\nEmail:${email}\n\n${message}`,
+//     };
+//
+//     transporter.sendMail(mailOptions, (error, info) => {
+//       if (error) {
+//         console.log("Failed to send email due to server error");
+//         res.send(false);
+//       } else {
+//         console.log("Successfully sent email");
+//         return res.send(true);
+//       }
+//     });
+//
+//     res.send(true);
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server listening at port: ${port}`);
