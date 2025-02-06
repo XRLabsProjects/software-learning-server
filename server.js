@@ -90,11 +90,11 @@ app.post("/api/sendEmail", async (req, res) => {
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       replyTo: email,
-      subject: "Fish", // TODO:
-      text: `From: ${name}\nEmail:${email}\n\n${message}`,
+      subject: `Software Learning Contact Form: ${name}`,
+      text: `Sender: ${name}\nSender Email:${email}\n\nContents: ${message}`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    await transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log("Failed to send email due to server error");
         res.send(false);
