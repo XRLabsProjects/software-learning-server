@@ -91,7 +91,7 @@ app.post("/api/sendEmail", async (req, res) => {
       to: process.env.EMAIL_TO,
       replyTo: email,
       subject: `Software Learning Contact Form: ${name}`,
-      text: `Sender: ${name}\nSender Email:${email}\n\nContents: ${message}`,
+      text: `Sender: ${name}\nEmail: ${email}\n\nContents: ${message}`,
     };
 
     await transporter.sendMail(mailOptions, (error, info) => {
