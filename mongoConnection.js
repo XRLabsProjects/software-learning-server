@@ -5,20 +5,20 @@ dotenv.config();
 
 const databaseName = process.env.DB_NAME;
 const uri = process.env.DB_URI;
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
 
 export async function getSoftwareData() {
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
-
+  let data = null;
   try {
     const connection = await client.connect();
     const database = await connection.db(databaseName);
-    return await database
+    data = await database
       .collection("softwareusers")
       .find({
         softwareUsed: { $exists: true },
@@ -28,25 +28,19 @@ export async function getSoftwareData() {
     console.log(
       `Failed to connect -- ${databaseName}  whilst trying to get software data`,
     );
-    await client.close();
   }
+  await client.close();
+  return data;
 }
 
 export async function getFilteredSoftwareData(query) {
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
-
+  let data = null;
   try {
     // console.log(query);
     const queryObject = Object.assign({}, ...query);
     const connection = await client.connect();
     const database = await connection.db(databaseName);
-    return await database
+    data = await database
       .collection("softwareusers")
       .find(queryObject)
       .toArray();
@@ -54,43 +48,31 @@ export async function getFilteredSoftwareData(query) {
     console.log(
       `Failed to connect -- ${databaseName}  whilst trying to get software data`,
     );
-    await client.close();
   }
+  await client.close();
+  return data;
 }
 
 export async function checkAccessKeyValidity(keyToQuery) {
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
-
+  let isValidKey = false;
   try {
     const connection = await client.connect();
     const database = await connection.db(databaseName);
     const result = await database
       .collection("accesskeys")
       .findOne({ key: keyToQuery });
-    return result != null;
+    isValidKey = result != null;
   } catch {
     console.log(
       `Failed to connect -- ${databaseName} whilst trying to check key validity`,
     );
-    await client.close();
   }
+  await client.close();
+  return isValidKey;
 }
 
 export async function addData(data) {
-  const client = new MongoClient(uri, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  });
-
+  let dataSuccessfullyAdded = false;
   try {
     const connection = await client.connect();
     const database = await connection.db(databaseName);
@@ -103,12 +85,12 @@ export async function addData(data) {
       otherSoftwareUsed: data.otherSoftwareUsed,
       year: data.year,
     });
-    return true;
+    dataSuccessfullyAdded = true;
   } catch {
     console.log(
       `Failed to connect -- ${databaseName} whilst trying to check key validity`,
     );
-    await client.close();
   }
-  return false;
+  await client.close();
+  return dataSuccessfullyAdded;
 }
