@@ -17,7 +17,7 @@ const port = process.env.DB_PORT;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   console.log("Server received call to path /");
   res.send("Server is ready");
 });
